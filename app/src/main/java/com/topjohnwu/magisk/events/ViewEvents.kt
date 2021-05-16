@@ -13,40 +13,27 @@ import com.topjohnwu.magisk.arch.*
 import com.topjohnwu.magisk.core.Const
 import com.topjohnwu.magisk.core.base.ActivityResultCallback
 import com.topjohnwu.magisk.core.base.BaseActivity
-import com.topjohnwu.magisk.core.model.module.OnlineModule
-import com.topjohnwu.magisk.events.dialog.MarkDownDialog
 import com.topjohnwu.magisk.utils.Utils
-import com.topjohnwu.magisk.view.MagiskDialog
 import com.topjohnwu.magisk.view.Shortcuts
 
 class ViewActionEvent(val action: BaseActivity.() -> Unit) : ViewEvent(), ActivityExecutor {
     override fun invoke(activity: BaseUIActivity<*, *>) = action(activity)
 }
 
-class OpenReadmeEvent(private val item: OnlineModule) : MarkDownDialog() {
-    override suspend fun getMarkdownText() = item.notes()
-    override fun build(dialog: MagiskDialog) {
-        super.build(dialog)
-        dialog.applyButton(MagiskDialog.ButtonType.NEGATIVE) {
-            titleRes = android.R.string.cancel
-        }.cancellable(true)
-    }
-}
-
 class PermissionEvent(
-    private val permission: String,
-    private val callback: (Boolean) -> Unit
+        private val permission: String,
+        private val callback: (Boolean) -> Unit
 ) : ViewEvent(), ActivityExecutor {
 
     override fun invoke(activity: BaseUIActivity<*, *>) =
-        activity.withPermission(permission) {
-            onSuccess {
-                callback(true)
+            activity.withPermission(permission) {
+                onSuccess {
+                    callback(true)
+                }
+                onFailure {
+                    callback(false)
+                }
             }
-            onFailure {
-                callback(false)
-            }
-        }
 }
 
 class BackPressEvent : ViewEvent(), ActivityExecutor {
@@ -89,7 +76,7 @@ class MagiskInstallFileEvent(private val callback: ActivityResultCallback)
 }
 
 class NavigationEvent(
-    private val directions: NavDirections
+        private val directions: NavDirections
 ) : ViewEvent(), ActivityExecutor {
     override fun invoke(activity: BaseUIActivity<*, *>) {
         (activity as? BaseUIActivity<*, *>)?.apply {

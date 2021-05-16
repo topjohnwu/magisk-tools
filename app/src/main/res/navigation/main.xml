@@ -82,7 +82,33 @@
         android:id="@+id/modulesFragment"
         android:name="com.topjohnwu.magisk.ui.module.ModuleFragment"
         android:label="ModuleFragment"
-        tools:layout="@layout/fragment_module_md2" />
+        tools:layout="@layout/fragment_module_md2">
+
+        <action
+            android:id="@+id/action_modulesFragment_to_moduleInfoFragment"
+            app:destination="@id/moduleInfoFragment"
+            app:enterAnim="@anim/fragment_enter"
+            app:exitAnim="@anim/fragment_exit"
+            app:popEnterAnim="@anim/fragment_enter_pop"
+            app:popExitAnim="@anim/fragment_exit_pop" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/moduleInfoFragment"
+        android:name="com.topjohnwu.magisk.ui.module.ModuleInfoFragment"
+        android:label="ModuleInfoFragment"
+        tools:layout="@layout/fragment_module_info">
+
+        <argument
+            android:name="online_module"
+            app:argType="com.topjohnwu.magisk.core.model.module.OnlineModule" />
+
+        <argument
+            android:name="show_download"
+            app:argType="boolean" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/safetynetFragment"

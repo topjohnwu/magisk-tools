@@ -122,6 +122,8 @@
     <string name="module_installed">@string/home_installed_version</string>
     <string name="module_section_online">Online</string>
     <string name="sorting_order">Sorting Order</string>
+    <string name="module_not_found_in_repo">This module is not found in the module repository.</string>
+    <string name="module_loading_readme">Loading readme…</string>
 
     <!--Settings-->
     <string name="settings_dark_mode_title">Theme Mode</string>

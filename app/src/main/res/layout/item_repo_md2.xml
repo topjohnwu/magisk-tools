@@ -24,8 +24,8 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
-        android:nextFocusRight="@id/module_info"
-        android:onClick="@{() -> viewModel.downloadPressed(item)}"
+        android:nextFocusRight="@id/module_download"
+        android:onClick="@{() -> viewModel.infoPressed(item)}"
         tools:layout_gravity="center"
         tools:layout_marginBottom="@dimen/l1"
         tools:layout_marginEnd="@dimen/l1">
@@ -90,36 +90,26 @@
                 android:textAppearance="@style/AppearanceFoundation.Caption.Variant"
                 android:textSize="11sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/module_info"
+                app:layout_constraintEnd_toStartOf="@+id/module_download"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/module_divider"
                 tools:ignore="SmallSp"
                 tools:text="@tools:sample/date/ddmmyy" />
 
-            <ImageView
-                android:id="@+id/module_info"
-                style="@style/WidgetFoundation.Icon"
-                android:layout_width="wrap_content"
-                android:alpha=".5"
-                android:nextFocusLeft="@id/module_card"
-                android:onClick="@{() -> viewModel.infoPressed(item)}"
-                android:paddingEnd="@dimen/l_50"
-                app:layout_constraintBottom_toBottomOf="@+id/module_download"
-                app:layout_constraintEnd_toStartOf="@+id/module_download"
-                app:layout_constraintTop_toTopOf="@+id/module_download"
-                app:srcCompat="@drawable/ic_info" />
-
-            <ImageView
+            <Button
                 android:id="@+id/module_download"
-                style="@style/WidgetFoundation.Icon.Primary"
+                style="@style/WidgetFoundation.Button.Text"
                 isEnabled="@{!(item.progress == -100 || (item.progress > 0 &amp;&amp; item.progress &lt; 100))}"
-                srcCompat="@{item.isUpdate ? R.drawable.ic_update_md2 : R.drawable.ic_download_md2}"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:contentDescription="@string/download"
-                android:nextFocusLeft="@id/module_info"
-                android:onClick="@{() -> viewModel.downloadPressed(item)}"
+                android:nextFocusLeft="@id/module_download"
+                android:onClick="@{() -> viewModel.infoPressed(item)}"
                 android:paddingStart="@dimen/l_50"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="@string/download"
+                android:textAllCaps="false"
+                app:icon="@{item.isUpdate ? R.drawable.ic_update_md2 : R.drawable.ic_download_md2}"
+                app:iconGravity="textEnd"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/module_divider"
                 tools:srcCompat="@drawable/ic_download_md2" />

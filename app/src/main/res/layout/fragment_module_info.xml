@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topjohnwu.magisk.ui.module.ModuleInfoViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:fitsSystemWindowsInsets="bottom">
+
+        <rikka.widget.borderview.BorderNestedScrollView
+            android:id="@+id/module_info_text_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/internal_action_bar_size"
+            android:scrollbarStyle="outsideInset"
+            android:scrollbars="vertical"
+            app:borderBottomVisibility="whenContentScrolled"
+            app:borderTopVisibility="never"
+            app:fitsSystemWindowsInsets="top">
+
+            <TextView
+                android:id="@+id/module_info_text"
+                markdownText="@{viewModel.readmeText}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_generic"
+                android:textAppearance="@style/AppearanceFoundation.Caption" />
+
+        </rikka.widget.borderview.BorderNestedScrollView>
+
+        <LinearLayout
+            android:id="@+id/module_info_buttons"
+            goneUnless="@{viewModel.showDownload}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="end"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            app:fitsSystemWindowsInsets="start|end">
+
+            <Button
+                android:id="@+id/module_download"
+                style="@style/WidgetFoundation.Button.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:onClick="@{(view) -> viewModel.downloadPressed(view, false)}"
+                android:text="@string/download"
+                app:icon="@drawable/ic_download_md2"
+                app:iconGravity="textStart" />
+
+            <Button
+                android:id="@+id/module_install"
+                style="@style/WidgetFoundation.Button.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:onClick="@{(view) -> viewModel.downloadPressed(view, true)}"
+                android:text="@string/install"
+                app:icon="@drawable/ic_install"
+                app:iconGravity="textStart" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

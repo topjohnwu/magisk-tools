@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:alpha="@{item.enabled ? 1f : .5f}"
             android:nextFocusRight="@id/module_indicator"
+            android:onClick="@{() -> viewModel.infoPressed(item)}"
             tools:layout_gravity="center"
             tools:layout_margin="@dimen/l1">
 
@@ -43,6 +44,7 @@
                 android:adjustViewBounds="true"
                 android:alpha=".05"
                 android:background="@null"
+                android:padding="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -91,7 +93,6 @@
                     app:layout_constraintBottom_toBottomOf="@+id/module_version_author"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1"
-                    app:layout_constraintStart_toEndOf="@+id/module_info"
                     app:layout_constraintTop_toTopOf="@+id/module_title" />
 
                 <TextView
@@ -116,21 +117,6 @@
                     android:layout_marginTop="@dimen/l1"
                     android:background="?colorSurfaceSurfaceVariant"
                     app:layout_constraintTop_toBottomOf="@+id/module_description" />
-
-                <ImageView
-                    android:id="@+id/module_info"
-                    style="@style/WidgetFoundation.Icon"
-                    gone="@{item.repo == null}"
-                    android:layout_width="wrap_content"
-                    android:alpha=".5"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:onClick="@{() -> viewModel.infoPressed(item)}"
-                    android:paddingEnd="@dimen/l_50"
-                    app:layout_constraintBottom_toBottomOf="@+id/module_remove"
-                    app:layout_constraintEnd_toStartOf="@+id/module_remove"
-                    app:layout_constraintTop_toTopOf="@+id/module_remove"
-                    app:srcCompat="@drawable/ic_info" />
 
                 <Button
                     android:id="@+id/module_remove"

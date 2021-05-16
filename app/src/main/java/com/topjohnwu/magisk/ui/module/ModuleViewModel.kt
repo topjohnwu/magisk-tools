@@ -13,10 +13,8 @@ import com.topjohnwu.magisk.core.model.module.LocalModule
 import com.topjohnwu.magisk.core.tasks.RepoUpdater
 import com.topjohnwu.magisk.data.database.RepoDao
 import com.topjohnwu.magisk.databinding.RvItem
-import com.topjohnwu.magisk.events.OpenReadmeEvent
 import com.topjohnwu.magisk.events.SelectModuleEvent
 import com.topjohnwu.magisk.events.SnackbarEvent
-import com.topjohnwu.magisk.events.dialog.ModuleInstallDialog
 import com.topjohnwu.magisk.ktx.addOnListChangedCallback
 import com.topjohnwu.magisk.ktx.reboot
 import com.topjohnwu.magisk.utils.EndlessRecyclerScrollListener
@@ -296,25 +294,25 @@ class ModuleViewModel(
         else -> Unit
     }
 
-    fun downloadPressed(item: RepoItem) = if (isConnected.get()) withExternalRW {
-        ModuleInstallDialog(item.item).publish()
-    } else {
-        SnackbarEvent(R.string.no_connection).publish()
-    }
-
     fun installPressed() = withExternalRW {
         SelectModuleEvent().publish()
     }
 
-    fun infoPressed(item: RepoItem) =
-        if (isConnected.get()) OpenReadmeEvent(item.item).publish()
+    fun infoPressed(item: RepoItem) {
+        if (isConnected.get()) ModuleFragmentDirections.actionModulesFragmentToModuleInfoFragment(item.item, true).navigate()
         else SnackbarEvent(R.string.no_connection).publish()
-
+    }
 
     fun infoPressed(item: ModuleItem) {
-        item.repo?.also {
-            if (isConnected.get()) OpenReadmeEvent(it).publish()
-            else SnackbarEvent(R.string.no_connection).publish()
-        } ?: return
+        item.repo.let {
+            if (it != null) {
+                if (isConnected.get())
+                    ModuleFragmentDirections.actionModulesFragmentToModuleInfoFragment(it, false).navigate()
+                else
+                    SnackbarEvent(R.string.no_connection).publish()
+            } else {
+                SnackbarEvent(R.string.module_not_found_in_repo).publish()
+            }
+        }
     }
 }

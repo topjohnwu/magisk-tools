@@ -77,6 +77,16 @@ inline fun <reified VM : ViewModel> ViewModelStoreOwner.viewModel() =
         ViewModelProvider(this, ServiceLocator.VMFactory).get(VM::class.java)
     }
 
+inline fun <reified VM : ViewModel> ViewModelStoreOwner.viewModel(crossinline factory: () -> VM) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        ViewModelProvider(this, object  :  ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel?> create(clz: Class<T>): T {
+                return factory() as T
+            }
+        }).get(VM::class.java)
+    }
+
 private fun createRepoDatabase(context: Context) =
     Room.databaseBuilder(context, RepoDatabase::class.java, "repo.db")
         .fallbackToDestructiveMigration()
