@@ -177,6 +177,10 @@ void load_kernel_info(cmdline *cmd) {
             strcpy(cmd->fstab_suffix, value);
         }
     });
+    
+    if (strcmp(cmd->hardware, "exynos850") == 0) {
+        cmd->skip_initramfs = false;
+    }
 
     LOGD("Kernel cmdline info:\n");
     LOGD("skip_initramfs=[%d]\n", cmd->skip_initramfs);
