@@ -85,7 +85,7 @@ restore_imgs() {
     flash_image $BACKUPDIR/${name}.img.gz $IMAGE
   done
   [ -f $BACKUPDIR/boot.img.gz ] || return 1
-  flash_image $BACKUPDIR/boot.img.gz $BOOTIMAGE
+  flash_image $BACKUPDIR/boot.img.gz $BOOTIMAGE && rm -rf $BACKUPDIR
 }
 
 post_ota() {

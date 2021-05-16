@@ -50,7 +50,7 @@ class SuRequestHandler(
         return true
     }
 
-    private suspend fun <T> Deferred<T>.timedAwait() : T? {
+    private suspend fun <T> Deferred<T>.timedAwait(): T? {
         return withTimeoutOrNull(SECONDS.toMillis(1)) {
             await()
         }
@@ -80,7 +80,7 @@ class SuRequestHandler(
                 val map = async { input.readRequest() }.timedAwait() ?: throw SuRequestError()
                 uid = map["uid"]?.toIntOrNull() ?: throw SuRequestError()
             }
-            policy = uid.toPolicy(pm)
+            policy = uid.toPolicy(pm, transformUid = true)
             true
         } catch (e: Exception) {
             when (e) {
@@ -102,7 +102,6 @@ class SuRequestHandler(
 
         policy.policy = action
         policy.until = until
-        policy.uid = policy.uid % 100000 + Const.USER_ID * 100000
 
         GlobalScope.launch(Dispatchers.IO) {
             try {
@@ -126,6 +125,7 @@ class SuRequestHandler(
             readFully(buf)
             return String(buf, Charsets.UTF_8)
         }
+
         val ret = ArrayMap<String, String>()
         while (true) {
             val name = readString()
