@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="upgrade_msg">Абнавіце Magisk Manager для завяршэння ўсталёўкі. Спампаваць і ўсталяваць?</string>
-    <string name="no_internet_msg">Калі ласка, падлучыцеся да інтэрнэта! Патрабуецца абнаўленне Magisk Manager.</string>
+    <string name="no_internet_msg">Калі ласка, падлучыцеся да інтэрнэту! Патрабуецца абнаўленне Magisk Manager.</string>
     <string name="dling">Спампоўванне</string>
     <string name="relaunch_app">Калі ласка, уласнаручна перазапусціце праграму</string>
 </resources>

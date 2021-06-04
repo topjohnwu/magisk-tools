@@ -2,7 +2,7 @@
 <resources>
     <!--Sections-->
     <string name="modules">Модулі</string>
-    <string name="superuser">Суперкарыстальнік</string>
+    <string name="superuser">Правы суперкарыстальніка</string>
     <string name="logs">Журналы</string>
     <string name="settings">Налады</string>
     <string name="refresh">Абнавіць даныя</string>
@@ -18,6 +18,8 @@
     <string name="not_available">Не</string>
     <string name="hide">Схаваць</string>
     <string name="home_package">Пакунак</string>
+    <string name="home_app_title">Праграма</string>
+    <string name="home_notice_content">Спампоўваце Magisk ТОЛЬКІ з афіцыйнай старонкі на GitHub. Файлы з невядомых крыніц могуць быць шкоднаснымі!</string>
     <string name="home_support_title">Падтрымайце нас</string>
     <string name="home_item_source">Зыходны код</string>
     <string name="home_support_content">Magisk ёсць і заўсёды будзе бясплатным праектам з адкрытым зыходным кодам. Але вы заўсёды можаце ахвяраваць нам на распрацоўку.</string>
@@ -46,6 +48,7 @@
     <string name="flash_screen_title">Усталёўка</string>
     <!--Superuser-->
     <string name="su_request_title">Запыт правоў суперкарыстальніка</string>
+    <string name="touch_filtered_warning">Праграма перакрывае запыт на выдачу правоў суперкарыстальніка, таму Magisk не можа апрацаваць ваш адказ</string>
     <string name="deny">Адмовіць</string>
     <string name="prompt">Запытаць</string>
     <string name="grant">Даць</string>
@@ -61,12 +64,12 @@
     <string name="su_snack_grant">Праграме \"%1$s\" дадзеныя правы суперкарыстальніка</string>
     <string name="su_snack_deny">Праграме \"%1$s\" адмоўлена ў правах суперкарыстальніка</string>
     <string name="su_snack_notif_on">Апавяшчэнні для \"%1$s\" уключаныя</string>
-    <string name="su_snack_notif_off">Апавяшчэнні для \"%1$s\" выключаныя</string>
+    <string name="su_snack_notif_off">Апавяшчэнні для \"%1$s\" адключаныя</string>
     <string name="su_snack_log_on">Вядзенне журнала для \"%1$s\" уключана</string>
-    <string name="su_snack_log_off">Вядзенне журнала для \"%1$s\" выключана</string>
+    <string name="su_snack_log_off">Вядзенне журнала для \"%1$s\" адключана</string>
     <string name="su_revoke_title">Адклікаць?</string>
     <string name="su_revoke_msg">Адклікаць правы для \"%1$s\"?</string>
-    <string name="toast">Выплыўныя апавягчэнні</string>
+    <string name="toast">Выплыўныя апавяшчэнні</string>
     <string name="none">Нічога</string>
     <string name="superuser_toggle_notification">Апавяшчэнні</string>
     <string name="superuser_toggle_revoke">Адклікаць</string>
@@ -76,7 +79,7 @@
     <string name="log_data_magisk_none">Журналы адсутнічаюць.</string>
     <string name="menuSaveLog">Захаваць журнал</string>
     <string name="menuClearLog">Ачысціць журнал</string>
-    <string name="logs_cleared">Журнал паспяхова ачышчаны.</string>
+    <string name="logs_cleared">Журнал паспяхова ачышчаны</string>
     <string name="pid">PID: %1$d</string>
     <string name="target_uid">Мэтавы UID: %1$d</string>
     <!--SafetyNet-->
@@ -86,14 +89,16 @@
     <string name="safetynet_attest_failure">Не атрымалася!</string>
     <string name="safetynet_attest_loading">Хвілінку…</string>
     <string name="safetynet_attest_restart">Паспрабаваць зноў</string>
-    <!-- MagiskHide -->
+    <!--MagiskHide-->
     <string name="show_system_app">Паказваць сістэмныя праграмы</string>
+    <string name="show_os_app">Паказваць сістэмныя праграмы</string>
     <string name="hide_filter_hint">Фільтраваць па назве</string>
     <string name="hide_scroll_up">Уверх</string>
     <string name="hide_filters">Фільтры</string>
     <string name="hide_search">Пошук</string>
-    <!--Module -->
+    <!--Module-->
     <string name="no_info_provided">(Няма інфармацыі)</string>
+    <string name="reboot_userspace">Праграмны перазапуск</string>
     <string name="reboot_recovery">Перазапуск у Recovery</string>
     <string name="reboot_bootloader">Перазапуск у Bootloader</string>
     <string name="reboot_download">Перазапуск у Download</string>
@@ -108,7 +113,7 @@
     <string name="module_installed">Усталяваныя</string>
     <string name="module_section_online">Анлайн</string>
     <string name="sorting_order">Парадак сартавання</string>
-    <!--Settings -->
+    <!--Settings-->
     <string name="settings_dark_mode_title">Рэжым афармлення</string>
     <string name="settings_dark_mode_message">Абярыце рэжым, які вам больш даспадобы!</string>
     <string name="settings_dark_mode_light">Заўсёды светлы</string>
@@ -118,6 +123,10 @@
     <string name="settings_download_path_message">Файлы будуць спампоўвацца ў %1$s</string>
     <string name="settings_clear_cache_title">Ачыстка кэшу рэпазіторыя</string>
     <string name="settings_clear_cache_summary">Ачысціць кэш сеціўных рэпазіторыяў. Гэта прымусіць абнавіць кэш</string>
+    <string name="settings_hide_app_title">Схаваць праграму Magisk</string>
+    <string name="settings_hide_app_summary">Усталяваць проксі-праграму з выпадковым ідэнтыфікатарам пакунка і адвольным значком</string>
+    <string name="settings_restore_app_title">Аднавіць праграму Magisk</string>
+    <string name="settings_restore_app_summary">Вярнуць праграму да зыходнага стану</string>
     <string name="language">Мова</string>
     <string name="system_default">(Сістэмная)</string>
     <string name="settings_check_update_title">Правяраць на абнаўленні</string>
@@ -150,6 +159,8 @@
     <string name="superuser_notification">Апавяшчэнне суперкарыстальніка</string>
     <string name="settings_su_reauth_title">Паўторная аўтэнтыфікацыя пасля абнаўлення</string>
     <string name="settings_su_reauth_summary">Паўторна запытваць правы суперкарыстальніка пасля абнаўлення праграмы</string>
+    <string name="settings_su_tapjack_title">Уключыць абарону ад перахоплівання ўводу</string>
+    <string name="settings_su_tapjack_summary">Дыялог выдачы правоў суперкарыстальніка не будзе адказваць на ўвод, калі па-над ім знаходзяцца іншыя вокны</string>
     <string name="settings_su_biometric_title">Уключыць біяметрычную аўтэнтыфікацыю</string>
     <string name="settings_su_biometric_summary">Выкарыстанне біяметрычнай аўтэнтыфікацыі для запытаў правоў суперкарыстальніка</string>
     <string name="no_biometric">Не падтрымліваецца прыладай альбо не ўключана ў наладах</string>
@@ -189,6 +200,7 @@
     <string name="flashing">Усталёўка…</string>
     <string name="done">Завершана!</string>
     <string name="failure">Не атрымалася</string>
+    <string name="hide_app_title">Хаванне праграмы Magisk…</string>
     <string name="open_link_failed_toast">Праграмы для адкрыцця спасылкі не знойдзена</string>
     <string name="complete_uninstall">Поўнае выдаленне</string>
     <string name="restore_img">Аднавіць раздзелы</string>
@@ -196,12 +208,22 @@
     <string name="restore_done">Аднаўленне завершана!</string>
     <string name="restore_fail">Рэзервовая копія адсутнічае!</string>
     <string name="proprietary_title">Спампаваць прапрыетарны код</string>
+    <string name="proprietary_notice">Magisk - праграмнае забеспячэнне з адкрытым зыходным кодам, таму не змяшчае закрыты код SafetyNet API.\n\nХочаце спампаваць пашырэнне для SafetyNet?</string>
     <string name="setup_fail">Усталяваць не атрымалася</string>
     <string name="env_fix_title">Патрабуецца дадатковая ўсталёўка</string>
+    <string name="env_fix_msg">Для карэктнай працы на вашай прыладзе спатрэбіцца ўсталяваць дадатковыя кампаненты. Хочаце працягнуць?</string>
     <string name="setup_msg">Наладка асяроддзя…</string>
     <string name="authenticate">Аўтэнтыфікацыя</string>
     <string name="unsupport_magisk_title">Непадтрымліваемая версія Magisk</string>
+    <string name="unsupport_magisk_msg">Гэтая версія праграмы не падтрымлівае Magisk версіі ніжэй за %1$s.\n\nПраграма будзе працаваць так, як быццам Magisk не ўсталяваны. Як мага хутчэй абнавіце Magisk.</string>
+    <string name="unsupport_general_title">Анамальны стан</string>
+    <string name="unsupport_system_app_msg">Гэтую праграму немагчыма запусціць як сістэмную. Калі ласка, вярніце праграму да стану карыстальніцкай.</string>
+    <string name="unsupport_other_su_msg">Выяўлены загад \"su\", які не належыць Magisk. Калі ласка, выдаліце іншы кліент.</string>
+    <string name="unsupport_external_storage_msg">Праграма Magisk усталяваная ў вонкавым сховішчы. Калі ласка, перамясціце яе ва ўнітарнае сховішча.</string>
+    <string name="unsupport_nonroot_stub_msg">Праграма не можа працягваць працу ў схаваным стане, бо root-доступ быў страчаны. Вярніце праграму да зыходнага стану.</string>
+    <string name="unsupport_nonroot_stub_title">@string/settings_restore_app_title</string>
     <string name="external_rw_permission_denied">Дайце доступ да сховішча, каб уключыць гэтую функцыю</string>
     <string name="add_shortcut_title">Дадаць цэтлік на хатні экран</string>
+    <string name="add_shortcut_msg">Пасля хавання праграмы значок і назву можа быць цяжка знайсці. Хочаце дадаць цэтлік на хатні экран?</string>
     <string name="app_not_found">Не знойдзена праграм для апрацоўкі гэтага дзеяння</string>
 </resources>
