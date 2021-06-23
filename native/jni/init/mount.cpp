@@ -10,13 +10,6 @@
 
 using namespace std;
 
-static string rtrim(string &&str) {
-    // Trim space, newline, and null byte from end of string
-    while (memchr(" \n\r", str[str.length() - 1], 4))
-        str.pop_back();
-    return std::move(str);
-}
-
 struct devinfo {
     int major;
     int minor;
@@ -263,16 +256,6 @@ cache:
             goto metadata;
     }
     if (!do_mount("ext4"))
-        goto metadata;
-    custom_rules_dir = path + "/magisk"s;
-    goto success;
-
-metadata:
-    // Fallback to metadata
-    strcpy(blk_info.partname, "metadata");
-    strcpy(b, "/metadata");
-    strcpy(p, "/metadata");
-    if (setup_block(false) < 0 || !do_mount("ext4"))
         goto persist;
     custom_rules_dir = path + "/magisk"s;
     goto success;
@@ -282,6 +265,16 @@ persist:
     strcpy(blk_info.partname, "persist");
     strcpy(b, "/persist");
     strcpy(p, "/persist");
+    if (setup_block(false) < 0 || !do_mount("ext4"))
+        goto metadata;
+    custom_rules_dir = path + "/magisk"s;
+    goto success;
+
+metadata:
+    // Fallback to metadata
+    strcpy(blk_info.partname, "metadata");
+    strcpy(b, "/metadata");
+    strcpy(p, "/metadata");
     if (setup_block(false) < 0 || !do_mount("ext4"))
         return;
     custom_rules_dir = path + "/magisk"s;

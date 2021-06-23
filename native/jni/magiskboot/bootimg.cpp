@@ -247,7 +247,15 @@ void boot_img::parse_image(uint8_t *addr, format_t type) {
     auto hp = reinterpret_cast<boot_img_hdr*>(addr);
     if (type == AOSP_VENDOR) {
         fprintf(stderr, "VENDOR_BOOT_HDR\n");
-        hdr = new dyn_img_vnd_v3(addr);
+        switch (hp->header_version) {
+        case 4:
+            hdr = new dyn_img_vnd_v4(addr);
+            break;
+        case 3:
+        default:
+            hdr = new dyn_img_vnd_v3(addr);
+            break;
+        }
     } else if (hp->page_size >= 0x02000000) {
         fprintf(stderr, "PXA_BOOT_HDR\n");
         hdr = new dyn_img_pxa(addr);
@@ -275,6 +283,9 @@ void boot_img::parse_image(uint8_t *addr, format_t type) {
             break;
         case 3:
             hdr = new dyn_img_v3(addr);
+            break;
+        case 4:
+            hdr = new dyn_img_v4(addr);
             break;
         default:
             hdr = new dyn_img_v0(addr);

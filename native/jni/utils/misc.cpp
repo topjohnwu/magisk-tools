@@ -206,3 +206,16 @@ string &replace_all(string &str, string_view from, string_view to) {
     }
     return str;
 }
+
+vector<string> split(const string& s, const string& delimiters) {
+    vector<string> result;
+    size_t base = 0;
+    size_t found;
+    while (true) {
+        found = s.find_first_of(delimiters, base);
+        result.push_back(s.substr(base, found - base));
+        if (found == string::npos) break;
+        base = found + 1;
+    }
+    return result;
+}

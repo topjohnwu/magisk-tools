@@ -40,6 +40,8 @@ open class Receiver : BaseReceiver() {
             }
             Intent.ACTION_UID_REMOVED -> {
                 getUid(intent)?.let { rmPolicy(it) }
+            }
+            Intent.ACTION_PACKAGE_FULLY_REMOVED -> {
                 getPkg(intent)?.let { Shell.su("magiskhide rm $it").submit() }
             }
             Intent.ACTION_LOCALE_CHANGED -> Shortcuts.setupDynamic(context)

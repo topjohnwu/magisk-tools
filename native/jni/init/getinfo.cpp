@@ -13,33 +13,59 @@ using namespace std;
 
 vector<string> mount_list;
 
-template<typename Func>
-static void parse_cmdline(const Func &fn) {
-    char cmdline[4096];
-    int fd = xopen("/proc/cmdline", O_RDONLY | O_CLOEXEC);
-    cmdline[read(fd, cmdline, sizeof(cmdline))] = '\0';
-    close(fd);
+template<char... cs> using chars = integer_sequence<char, cs...>;
 
-    char *tok, *eql, *tmp, *saveptr;
-    saveptr = cmdline;
-    while ((tok = strtok_r(nullptr, " \n", &saveptr)) != nullptr) {
-        eql = strchr(tok, '=');
-        if (eql) {
-            *eql = '\0';
-            if (eql[1] == '"') {
-                tmp = strchr(saveptr, '"');
-                if (tmp != nullptr) {
-                    *tmp = '\0';
-                    saveptr[-1] = ' ';
-                    saveptr = tmp + 1;
-                    eql++;
-                }
-            }
-            fn(tok, eql + 1);
-        } else {
-            fn(tok, "");
+template<char... escapes, char... breaks>
+static string extract_qutoed_str_until(chars<escapes...>, chars<breaks...>,
+                                       string_view sv, size_t &begin, bool &quoted) {
+    string result;
+    char match_array[] = {escapes..., breaks..., '"'};
+    string_view match(match_array, sizeof(match_array));
+    for (auto end = begin;; ++end) {
+        end = sv.find_first_of(match, end);
+        if (end == string_view::npos || ((sv[end] == breaks) || ...) ||
+            (!quoted && ((sv[end] == escapes) || ...))) {
+            result.append(sv.substr(begin, end - begin));
+            begin = end;
+            return result;
+        }
+        if (sv[end] == '"') {
+            quoted = !quoted;
+            result.append(sv.substr(begin, end - begin));
+            begin = end + 1;
         }
     }
+}
+
+//[pair_split][key][assign_split][assign][assign_split][value][pair_split]
+template<char... pair_spilt, char... assign, char... assign_split>
+static auto parse(chars<pair_spilt...>, chars<assign...>, chars<assign_split...>, string_view sv) {
+    vector<pair<string, string>> kv;
+    char next_array[] = {pair_spilt...};
+    string_view next(next_array, sizeof(next_array));
+    char skip_array[] = {assign..., assign_split...};
+    string_view skip(skip_array, sizeof(skip_array));
+    bool quoted = false;
+    for (size_t cur = 0u; cur < sv.size();
+         cur = sv.find_first_not_of(next, cur)) {
+        auto key = extract_qutoed_str_until(chars<assign_split..., pair_spilt...>{},
+                                            chars<assign...>{}, sv, cur, quoted);
+        cur = sv.find_first_not_of(skip, cur);
+        if (((cur == string_view::npos) || ... || (sv[cur] == pair_spilt))) {
+            kv.emplace_back(key, "");
+            continue;
+        }
+        auto value = extract_qutoed_str_until(chars<pair_spilt...>{}, chars<>{}, sv, cur, quoted);
+        kv.emplace_back(key, value);
+    }
+    return kv;
+}
+
+static auto parse_cmdline(string_view sv) {
+    return parse(chars<' '>{}, chars<'='>{}, chars<>{}, sv);
+}
+static auto parse_bootconfig(string_view sv) {
+    return parse(chars<'\n'>{}, chars<'='>{}, chars<' '>{}, sv);
 }
 
 #define test_bit(bit, array) (array[bit / 8] & (1 << (bit % 8)))
@@ -66,7 +92,7 @@ static bool check_key_combo() {
     if (events.empty())
         return false;
 
-    run_finally fin([&]{ std::for_each(events.begin(), events.end(), close); });
+    run_finally fin([&] { for_each(events.begin(), events.end(), close); });
 
     // Return true if volume up key is held for more than 3 seconds
     int count = 0;
@@ -155,12 +181,12 @@ void load_kernel_info(cmdline *cmd) {
     // Log to kernel
     setup_klog();
 
-    parse_cmdline([=](string_view key, const char *value) {
+    for (const auto&[key, value] : parse_cmdline(full_read("/proc/cmdline"))) {
         if (key == "androidboot.slot_suffix") {
-            strcpy(cmd->slot, value);
+            strcpy(cmd->slot, value.data());
         } else if (key == "androidboot.slot") {
             cmd->slot[0] = '_';
-            strcpy(cmd->slot + 1, value);
+            strcpy(cmd->slot + 1, value.data());
         } else if (key == "skip_initramfs") {
             cmd->skip_initramfs = true;
         } else if (key == "androidboot.force_normal_boot") {
@@ -168,20 +194,44 @@ void load_kernel_info(cmdline *cmd) {
         } else if (key == "rootwait") {
             cmd->rootwait = true;
         } else if (key == "androidboot.android_dt_dir") {
-            strcpy(cmd->dt_dir, value);
+            strcpy(cmd->dt_dir, value.data());
         } else if (key == "androidboot.hardware") {
-            strcpy(cmd->hardware, value);
+            strcpy(cmd->hardware, value.data());
         } else if (key == "androidboot.hardware.platform") {
-            strcpy(cmd->hardware_plat, value);
+            strcpy(cmd->hardware_plat, value.data());
         } else if (key == "androidboot.fstab_suffix") {
-            strcpy(cmd->fstab_suffix, value);
+            strcpy(cmd->fstab_suffix, value.data());
         }
-    });
+    }
 
     LOGD("Kernel cmdline info:\n");
     LOGD("skip_initramfs=[%d]\n", cmd->skip_initramfs);
     LOGD("force_normal_boot=[%d]\n", cmd->force_normal_boot);
     LOGD("rootwait=[%d]\n", cmd->rootwait);
+    LOGD("slot=[%s]\n", cmd->slot);
+    LOGD("dt_dir=[%s]\n", cmd->dt_dir);
+    LOGD("fstab_suffix=[%s]\n", cmd->fstab_suffix);
+    LOGD("hardware=[%s]\n", cmd->hardware);
+    LOGD("hardware.platform=[%s]\n", cmd->hardware_plat);
+
+    for (const auto&[key, value] : parse_bootconfig(full_read("/proc/bootconfig"))) {
+        if (key == "androidboot.slot_suffix") {
+            strcpy(cmd->slot, value.data());
+        } else if (key == "androidboot.force_normal_boot") {
+            cmd->force_normal_boot = value[0] == '1';
+        } else if (key == "androidboot.android_dt_dir") {
+            strcpy(cmd->dt_dir, value.data());
+        } else if (key == "hardware") {
+            strcpy(cmd->hardware, value.data());
+        } else if (key == "androidboot.hardware.platform") {
+            strcpy(cmd->hardware_plat, value.data());
+        } else if (key == "androidboot.fstab_suffix") {
+            strcpy(cmd->fstab_suffix, value.data());
+        }
+    }
+
+    LOGD("Boot config info:\n");
+    LOGD("force_normal_boot=[%d]\n", cmd->force_normal_boot);
     LOGD("slot=[%s]\n", cmd->slot);
     LOGD("dt_dir=[%s]\n", cmd->dt_dir);
     LOGD("fstab_suffix=[%s]\n", cmd->fstab_suffix);

@@ -138,6 +138,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
+                    android:enabled="@{!item.updated}"
                     android:focusable="true"
                     android:onClick="@{() -> item.delete(viewModel)}"
                     android:text="@{item.removed ? @string/module_state_restore : @string/module_state_remove}"

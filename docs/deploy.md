@@ -54,6 +54,7 @@ The script `scripts/emulator.sh` allows you to establish a minimal Magisk enviro
 Occasionally, there would be exploits in certain devices that could lead to full fledged root. On modern Android, it is possible to use MagiskSU if you can gain a shell with the following conditions:
 
 - Effective UID should be privileged (root, or `euid=0`)
+- Full Linux capabilities
 - Have the ability to reload `sepolicy` (which 99.9% of the time means SELinux permissive)
 
 You can check out `scripts/emulator.sh` as a reference for bringing up Magisk with a root shell. Note that these changes are not persistent, and you will need to find ways to rerun the whole process every boot.

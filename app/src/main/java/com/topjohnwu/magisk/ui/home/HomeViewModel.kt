@@ -145,7 +145,7 @@ class HomeViewModel(
         )
         if (invalidStates.any { it == stateMagisk } || shownDialog) return
 
-        val result = Shell.su("env_check").await()
+        val result = Shell.su("env_check ${Info.env.magiskVersionString} ${Info.env.magiskVersionCode}").await()
         if (!result.isSuccess) {
             shownDialog = true
             EnvFixDialog().publish()

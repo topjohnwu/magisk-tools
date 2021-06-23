@@ -621,15 +621,16 @@ copy_sepolicy_rules() {
     RULESDIR=/data/unencrypted/magisk
   elif grep -q ' /cache ' /proc/mounts; then
     RULESDIR=/cache/magisk
-  elif grep -q ' /metadata ' /proc/mounts; then
-    RULESDIR=/metadata/magisk
   elif grep -q ' /persist ' /proc/mounts; then
     RULESDIR=/persist/magisk
   elif grep -q ' /mnt/vendor/persist ' /proc/mounts; then
     RULESDIR=/mnt/vendor/persist/magisk
+  elif grep -q ' /metadata ' /proc/mounts; then
+    RULESDIR=/metadata/magisk
   else
     return
   fi
+  ui_print "- Sepolicy rules dir is $RULESDIR"
 
   # Copy all enabled sepolicy.rule
   for r in /data/adb/modules*/*/sepolicy.rule; do
@@ -765,6 +766,8 @@ install_module() {
   if $BOOTMODE; then
     # Update info for Magisk app
     mktouch $NVBASE/modules/$MODID/update
+    rm -rf $NVBASE/modules/$MODID/remove 2>/dev/null
+    rm -rf $NVBASE/modules/$MODID/disable 2>/dev/null
     cp -af $MODPATH/module.prop $NVBASE/modules/$MODID/module.prop
   fi
 

@@ -76,6 +76,18 @@ static inline bool str_starts(std::string_view s, std::string_view ss) {
 static inline bool str_ends(std::string_view s, std::string_view ss) {
     return s.size() >= ss.size() && s.compare(s.size() - ss.size(), std::string::npos, ss) == 0;
 }
+static inline std::string ltrim(std::string &&s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+        return !std::isspace(ch);
+    }));
+    return std::move(s);
+}
+static inline std::string rtrim(std::string &&s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
+        return !std::isspace(ch) && ch != '\0';
+    }).base(), s.end());
+    return std::move(s);
+}
 
 int fork_dont_care();
 int fork_no_orphan();
@@ -85,6 +97,7 @@ uint32_t binary_gcd(uint32_t u, uint32_t v);
 int switch_mnt_ns(int pid);
 int gen_rand_str(char *buf, int len, bool varlen = true);
 std::string &replace_all(std::string &str, std::string_view from, std::string_view to);
+std::vector<std::string> split(const std::string& s, const std::string& delimiters);
 
 struct exec_t {
     bool err = false;

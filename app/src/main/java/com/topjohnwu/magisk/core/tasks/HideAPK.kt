@@ -147,19 +147,33 @@ object HideAPK {
         return true
     }
 
+    @Suppress("DEPRECATION")
     suspend fun hide(activity: Activity, label: String) {
+        val dialog = android.app.ProgressDialog(activity).apply {
+            setTitle(activity.getString(R.string.hide_app_title))
+            isIndeterminate = true
+            show()
+        }
         val result = withContext(Dispatchers.IO) {
             patchAndHide(activity, label)
         }
+        dialog.dismiss()
         if (!result) {
             Utils.toast(R.string.failure, Toast.LENGTH_LONG)
         }
     }
 
+    @Suppress("DEPRECATION")
     fun restore(activity: Activity) {
+        val dialog = android.app.ProgressDialog(activity).apply {
+            setTitle(activity.getString(R.string.restore_img_msg))
+            isIndeterminate = true
+            show()
+        }
         val apk = DynAPK.current(activity)
         APKInstall.registerInstallReceiver(activity, WaitPackageReceiver(APPLICATION_ID, activity))
         Shell.su("adb_pm_install $apk").submit {
+            dialog.dismiss()
             if (!it.isSuccess)
                 APKInstall.installHideResult(activity, apk)
         }

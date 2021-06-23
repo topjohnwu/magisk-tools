@@ -5,6 +5,7 @@ import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.io.SuFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.*
 
 class LocalModule(path: String) : Module() {
     override var id: String = ""
@@ -44,13 +45,14 @@ class LocalModule(path: String) : Module() {
         get() = removeFile.exists()
         set(remove) {
             if (remove) {
+                if (updateFile.exists()) return
                 removeFile.createNewFile()
                 if (Const.Version.atLeast_21_2())
                     Shell.su("copy_sepolicy_rules").submit()
                 else
                     Shell.su("rm -rf $PERSIST/$id").submit()
             } else {
-                !removeFile.delete()
+                removeFile.delete()
                 if (Const.Version.atLeast_21_2())
                     Shell.su("copy_sepolicy_rules").submit()
                 else
@@ -83,7 +85,7 @@ class LocalModule(path: String) : Module() {
                 .orEmpty()
                 .filter { !it.isFile }
                 .map { LocalModule("${Const.MAGISK_PATH}/${it.name}") }
-                .sortedBy { it.name.toLowerCase() }
+                .sortedBy { it.name.lowercase(Locale.ROOT) }
         }
     }
 }

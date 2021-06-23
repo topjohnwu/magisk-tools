@@ -54,7 +54,6 @@ Some binaries and files should be stored on non-volatile storages in `/data`. In
 - It is an existing folder on modern Android, so it cannot be used as an indication of the existence of Magisk.
 - The permission of the folder is by default `700`, owner as `root`, so non-root processes are unable to enter, read, write the folder in any possible way.
 - The folder is labeled with secontext `u:object_r:adb_data_file:s0`, and very few processes have the permission to do any interaction with that secontext.
-- The folder is located in *Device encrypted storage*, so it is accessible as soon as data is properly mounted in FBE (File-Based Encryption) devices.
 
 ```
 SECURE_DIR=/data/adb
