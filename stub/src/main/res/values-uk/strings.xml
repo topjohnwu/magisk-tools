@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="upgrade_msg">Оновіть Magisk Manager для завершення встановлення. Завантажити і встановити?</string>
-    <string name="no_internet_msg">Будь ласка, підключіться до Інтернету! Потрібно оновити Magisk Manager.</string>
+    <string name="upgrade_msg">Оновіть додаток Magisk для завершення встановлення. Завантажити і встановити?</string>
+    <string name="no_internet_msg">Будь ласка, підключіться до Інтернету! Потрібно оновити додаток Magisk.</string>
     <string name="dling">Завантаження</string>
 </resources>
